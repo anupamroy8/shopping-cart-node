@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+
+  <nav
+  class="navbar navbar-expand-lg navbar-light"
+  style="background-color: #e3f2fd;"
+>
+  <a class="navbar-brand" href="/">MY AMAZON</a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/products"
+          >Home <span class="sr-only">(current)</span></a
+        >
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/products/add">Add Product</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Categories</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input
+        class="form-control mr-sm-2"
+        type="search"
+        placeholder="Search"
+        aria-label="Search"
+      />
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+        Search
+      </button>
+    </form>
+    <li class="navbar-nav nav-item">
+      <a class="nav-link active" href="/products/<%=locals.user.id%>/mycart"
+        ><i class="fa fa-shopping-cart"></i>Cart</a
+      >
+    </li>
+    <li class="navbar-nav nav-item">
+      <a class="nav-link" href="/users/logout">Logout</a>
+    </li>
+    <li class="navbar-nav nav-item">
+      <%if(locals.user.isAdmin){%>
+      <img
+        src="<%=locals.user.avatar%>"
+        class="small-img rounded-circle img-responsive z-depth-0"
+        alt="<%=locals.user.username%>"
+      />
+      <%} else if(!locals.user.isAdmin) {%>
+
+      <img
+        src="/images/uploads/<%=locals.user.avatar%>"
+        class="small-img rounded-circle img-responsive z-depth-0"
+        alt="<%=locals.user.username%>"
+      />
+      <%} else {%>
+      <img
+        src="..."
+        class="small-img rounded-circle img-responsive z-depth-0"
+        alt="<%=locals.user.username%>"
+      />
+      <%}%>
+    </li>
+  </div>
+</nav>
+
+<div class="container">
+    <h1>Product details here:</h1>
+    <h2><%=product.title%></h2>
+    <div class="d-flex justify-content-between">
+        <div class="figure">
+            <img src="/images/uploads/<%=product.imagePath%>" class="image-size figure-img rounded" alt="<%=product.title%>">
+        </div>
+        <div>
+            <figcaption class="figure-caption"><%=product.description%></figcaption>
+            <p class="card-text">Price: <span>&#8377;</span><%=product.price%></p>
+            <%product.category.forEach(c => { %>
+                <span class="badge badge-pill badge-success"><%=c%></span>
+            <% })%>
+            <br><br>
+            <form action="/products/addToCart/<%=product._id%>" method="post" class="card-text">
+              <select name="quantity" id="" class="card-text">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+              <button type="submit" class="btn btn-success card-text" >
+                Add to cart
+              </button>
+            </form>
+           <br>
+           <% if(locals.user.isAdmin){%>
+            <a href="/products/<%=product._id%>/edit" class="btn btn-warning">Edit</a>
+            <a href="/products/<%=product._id%>/delete" class="btn btn-danger">Delete</a>
+           <%}%>
+           
+        </div>
+        
+    </div>
+    <a href="/products" class="btn btn btn-info">Back to products</a>
+    
+</div>
+
+<link
+rel="stylesheet"
+href="https://use.fontawesome.com/releases/v5.0.8/css/all.css"
+/>
+
+</body>
+</html>

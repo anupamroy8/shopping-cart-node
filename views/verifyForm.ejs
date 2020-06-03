@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title>Verify your email</title>
+</head>
+<body>
+    
+<nav class="navbar navbar-expand-lg navbar-light"  style="background-color: #e3f2fd">
+    <a class="navbar-brand" href="/">MY AMAZON</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/products">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/products/add">Add Product</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Categories</a>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+      <li class="navbar-nav nav-item">
+        <a class="nav-link active" href="#"><i class="fa fa-shopping-cart"></i>Cart</a>
+      </li>
+      <li class="navbar-nav nav-item">
+        <a class="nav-link" href="/users/logout">Logout</a>
+      </li>
+      <li class="navbar-nav nav-item">
+
+        <%if(locals.user.isAdmin){%>
+            <img src="<%=locals.user.avatar%>" class="small-img rounded-circle img-responsive z-depth-0"
+            alt="<%=locals.user.username%>">
+          <%} else {%>
+            <img src="/images/uploads/<%=locals.user.avatar%>" class="small-img rounded-circle img-responsive z-depth-0"
+            alt="<%=locals.user.username%>">
+          <%}%>
+      </li>
+    </div>
+</nav>
+
+<div class="container">
+    <br />
+    <div class="card bg-light">
+      <article class="card-body mx-auto" style="max-width: 400px;">
+        <h4 class="card-title mt-3 text-center">Verify your email</h4>
+        <p class="text-center">Welcome <%=email%>!!, Kindly check your mail for verification id</p>
+        
+      <form         
+        action="/users/<%=email%>/verify"
+        method="POST">
+          <div class="form-group input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                <i class="fa fa-user"></i>
+              </span>
+            </div>
+            <input
+              name="verificationCode"
+              class="form-control"
+              placeholder="Enter Verification Code:"
+              type="text"
+            />
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">
+                Verify
+            </button>
+          </div>
+          <!-- form-group// -->
+          <p class="text-center">Did not received code? Register again!! <a href="/users/register">Register</a></p>
+      </form>
+      </article>
+    </div>
+    <!-- card.// -->
+  </div>
+  <!--container end.//-->
+  <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.0.8/css/all.css"
+    />
+</body>
+</html>
+
+

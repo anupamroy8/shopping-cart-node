@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+      <link
+        rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+        crossorigin="anonymous"
+      />
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="/javascripts/index.js" defer></script>
+    <!-- <script src="javascripts/index.js"></script> -->
+    <title>Cart</title>
+  </head>
+  <body onload="summing()">
+  
+    <nav
+      class="navbar navbar-expand-lg navbar-light"
+      style="background-color: #e3f2fd;"
+    >
+      <a class="navbar-brand" href="/">MY AMAZON</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/products"
+              >Home <span class="sr-only">(current)</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/products/add">Add Product</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Categories</a>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <input
+            class="form-control mr-sm-2"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+          />
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+            Search
+          </button>
+        </form>
+        <li class="navbar-nav nav-item">
+          <a class="nav-link active" href="/products/<%=locals.user.id%>/mycart"
+            ><i class="fa fa-shopping-cart"></i>Cart <%=displayCart.length%></a
+          >
+        </li>
+        <li class="navbar-nav nav-item">
+          <a class="nav-link" href="/users/logout">Logout</a>
+        </li>
+        <li class="navbar-nav nav-item">
+          <%if(locals.user.isAdmin){%>
+          <img
+            src="<%=locals.user.avatar%>"
+            class="small-img rounded-circle img-responsive z-depth-0"
+            alt="<%=locals.user.username%>"
+          />
+          <%} else if(!locals.user.isAdmin) {%>
+
+          <img
+            src="/images/uploads/<%=locals.user.avatar%>"
+            class="small-img rounded-circle img-responsive z-depth-0"
+            alt="<%=locals.user.username%>"
+          />
+          <%} else {%>
+          <img
+            src="..."
+            class="small-img rounded-circle img-responsive z-depth-0"
+            alt="<%=locals.user.username%>"
+          />
+          <%}%>
+        </li>
+      </div>
+    </nav>
+    <!--  -->
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 col-md-10 col-md-offset-1">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th class="text-center">Price</th>
+                <th class="text-center">Total</th>
+                <th></th>
+              </tr>
+            </thead>
+            
+            <tbody>
+              <%displayCart.forEach(p=>{%>
+
+              <tr>
+                <td class="col-md-6">
+                  <div class="media">
+                    <a class="thumbnail pull-left" href="#">
+                      <img
+                        class="image-size"
+                        src="/images/uploads/<%=p.item.imagePath%>"
+                      />
+                    </a>
+                    <div class="media-body">
+                      <h4 class="media-heading">
+                        <a href="/products/<%=p.item.id%>/view"><%=p.item.title%></a>
+                      </h4>
+
+                      <span>Status: </span
+                        ><span class="text-success"
+                          ><strong>In Stock</strong></span
+                        >
+                    </div>
+                  </div>
+                </td>
+                <td class="col-md-1" style="text-align: center;">
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="exampleInputEmail1"
+                    value="<%=p.quantity%>"
+                  />
+                </td>
+                <td class="col-md-1 text-center"><strong><span>&#8377; <%=p.item.price%></span> </strong></td>
+                <td class="col-md-1 text-center"><strong><span >&#8377; <span id="calc"><%=((p.item.price)*(p.quantity))%></span></span> </td>
+                <td class="col-md-1">
+                  <button type="button" class="btn btn-danger white">
+                    <span class="glyphicon glyphicon-remove"></span> 
+                    <a href="/products/<%=p.id%>/deleteCart">Remove</a>
+                  </button>
+                </td>
+              </tr>
+
+              <%})%>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><h3>Total</h3></td>
+                <td class="text-right">
+                  <h3><strong><span>&#8377;<span id="summ"> </span></h3>
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                  <button type="button" class="btn btn-info white">
+                    <span class="glyphicon glyphicon-shopping-cart"></span>
+                    <a href="/products">Continue</a>
+                    
+                  </button>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-success white">
+                    <a href="/products">Checkout</a>
+                     <span class="glyphicon glyphicon-play"></span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <link
+    rel="stylesheet"
+    href="https://use.fontawesome.com/releases/v5.0.8/css/all.css"
+  />
+
+  </body>
+</html>

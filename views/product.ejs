@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Products</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link
+    href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    rel="stylesheet"
+    id="bootstrap-css"
+  />
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-light"  style="background-color: #e3f2fd">
+      <a class="navbar-brand" href="/">MY AMAZON</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/products">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/products/add">Add Product</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="#">Categories</a>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        <li class="navbar-nav nav-item">
+          <a class="nav-link active" href="#"><i class="fa fa-shopping-cart"></i>Cart</a>
+        </li>
+        <li class="navbar-nav nav-item">
+          <a class="nav-link" href="/users/login">Login</a>
+        </li>
+  
+      </div>
+    </nav>
+
+    <div class="container">
+      <!-- <h2>Products</h2> -->
+      <h2>Welcome <%=locals.user.username%>!!!</h2>
+      <div class="row d-flex">
+        <% products.forEach(p=> {%>
+        <div class="col-md-4 d-flex align-content-around flex-wrap">
+          <div class="card" style="width: 18rem;">
+            <img
+              src="images/uploads/<%=p.imagePath%>"
+              class="card-img-top myimg"
+              alt="product_image"
+            />
+            <div class="card-body">
+              <h5 class="card-title"><%=p.title%></h5>
+              <p class="card-text"><%=p.description.length>180?p.description.slice(0,180)+"...":p.description%></p>
+              <p class="card-text"><span>&#8377;</span><%=p.price%></p>
+              <%p.category.forEach(c => { %>
+              <span class="badge badge-pill badge-secondary"><%=c%></span>
+              <% })%>
+              <br /><br />
+              <a href="/products/<%=p._id%>/view" class="btn btn btn-info"
+                >View</a
+              >
+              <form action="/products/addToCart/<%=p._id%>" method="post" class="card-text">
+                
+                <select name="quantity" id="" class="card-text none">
+                  <option value="1">1</option>
+                </select>
+                <button type="submit" class="btn btn-success card-text" >
+                  Add to cart
+                </button>
+                <br /><br />
+              </form>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+    <link
+    rel="stylesheet"
+    href="https://use.fontawesome.com/releases/v5.0.8/css/all.css"
+  />
+  </body>
+</html>

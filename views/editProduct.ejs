@@ -1,0 +1,16 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+<div class="container">
+    <h1>Edit product here:</h1>
+    
+    <form action="/products/<%=product.id%>/edit" method="POST" enctype="multipart/form-data" >
+        <input type="text" name="title" value="<%=product.title%>">
+        <input type="text" name="description" value="<%=product.description%>">
+        <input type="text" name="price" value="<%=product.price%>">
+        <input type="text" name="category" value="<%=product.category%>">
+        <input type="text" name="quantity" value="<%=product.quantity%>">  
+        <label for="imagePath">Enter image Link/URL</label>
+        <input type="file" name="imagePath">
+        <button type="submit" class="waves-effect waves-light btn-small">Edit</button>
+    </form>
+</div>
