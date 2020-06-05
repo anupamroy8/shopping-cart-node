@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 var Cart = require('../models/cart');
+var Item = require("../models/ItemList");
 var nodemailer = require("nodemailer");
 var path = require("path");
 var smtpTransport = require('nodemailer-smtp-transport');
@@ -42,6 +43,10 @@ router.post("/login", (req,res,next)=>{
     else if(!user.verifyPassword(password)){
       console.log("wrong password");
       return res.redirect("/users/login");
+    }
+    if(user.isBlocked){
+      console.log("User is Blocked");
+      res.send('<h1>User is Blocked</h1>');
     }
     req.session.userId = user.id;
     console.log("loggedin");
@@ -98,6 +103,7 @@ router.post("/register", upload.single("avatar"), (req, res, next)=>{
   })
 })
 
+// Logout
 
 router.get("/logout", (req, res, next)=>{
   req.session.destroy();
@@ -105,19 +111,70 @@ router.get("/logout", (req, res, next)=>{
   res.redirect("/");
 })
 
+
+// email verify
 router.post("/:email/verify", (req,res, next)=>{
   User.findOne({email: req.params.email}, (err,user)=>{
     if(err) return next(err);
     if(user.verificationCode === req.body.verificationCode){
-      User.findOneAndUpdate({email: req.params.email}, {isVerified: true}, {new:true}, (err, user)=>{
+      User.findOneAndUpdate({email: req.params.email}, {isVerified: true, verificationCode:0000 }, {new:true}, (err, user)=>{
         if(err) return next(err);
         res.redirect("/products");
       })
     } else {
-      res.send("Wrong code. Please check your verification code")
+      res.send("<h1>Wrong code. Please check your verification code<h1>")
     }
   });
-
 })
+
+// Block/Unblock a user
+router.post("/block/:id", async (req,res, next)=>{
+  try {
+    var userId = req.params.id;
+    var userToBlock = await User.findById(userId);
+    console.log(userToBlock, "Blockkk");
+    if(!userToBlock.isBlocked){
+      var block = await User.findByIdAndUpdate(userId, { isBlocked: true });
+    } else {
+      var unblock = await User.findByIdAndUpdate(userId, { isBlocked: false });
+    }
+    res.redirect("/users/all")
+  } catch (error) {
+    next(error)
+  }
+})
+
+
+// Delete a user
+router.post("/delete/:id", async (req,res,next)=>{
+  var userId = req.params.id;
+  var user = await User.findById(userId, "-password");
+  var cartId = user.cart;
+  console.log(user,"herreeeee");
+  
+  // deleting starts here
+  var deleteItems = await Item.find({cart:cartId});
+  console.log(deleteItems,"itemsss");
+  var deleteCart = await Cart.findById(cartId);
+  console.log(deleteCart,"cartttt");
+  var deleteuser = await User.findById(userId);
+  console.log(deleteuser,"deletted user");
+  res.redirect("/users/all")
+});
+
+
+// get list of all users
+router.get("/all", async(req, res, next)=>{
+  try {
+    var allUser = await User.find({},"-password");
+    // console.log(allUser, "usersssss");
+    res.render("userList", {allUser})
+  } catch (error) {
+    next(error)
+  }
+})
+
+
+
 
 module.exports = router;

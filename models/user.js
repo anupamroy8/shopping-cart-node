@@ -23,6 +23,10 @@ var userSchema = new Schema({
         type:Boolean,
         default:false
     },
+    isBlocked: {
+        type:Boolean,
+        default:false
+    },
     verificationCode: {
         type:String,
     },
@@ -33,7 +37,7 @@ var userSchema = new Schema({
     isAdmin: {
         type:Boolean,
         default:false
-    }
+    },
 }, {timestamps:true},)
 
 userSchema.pre("save", function(next) {

@@ -198,7 +198,6 @@ h5 {
   color: #a9b2b9;
   font-size: 14px;
   font-weight: 400;
-  text-transform: uppercase;
 }
 strong {
   font-weight: 400;
@@ -334,6 +333,10 @@ p a {
   display: none;
 }
 
+.quantity {
+  font-size: 22px !important;
+}
+
 .white a {
   color: #fff !important;
 }
@@ -343,4 +346,7 @@ p a {
   border-style: none;
   object-fit: contain;
   height: 300px !important;
+}
+.cmargin {
+  margin-bottom: 1.2rem;
 }

@@ -52,7 +52,7 @@
     </form>
     <li class="navbar-nav nav-item">
       <a class="nav-link active" href="/products/<%=locals.user.id%>/mycart"
-        ><i class="fa fa-shopping-cart"></i>Cart</a
+        ><i class="fa fa-shopping-cart"></i>Cart <%=item.length%></a
       >
     </li>
     <li class="navbar-nav nav-item">
@@ -69,7 +69,7 @@
 
       <img
         src="/images/uploads/<%=locals.user.avatar%>"
-        class="small-img rounded-circle img-responsive z-depth-0"
+        class="small-img rounded-circle img-responsive z-depth-0 "
         alt="<%=locals.user.username%>"
       />
       <%} else {%>
@@ -92,13 +92,13 @@
         </div>
         <div>
             <figcaption class="figure-caption"><%=product.description%></figcaption>
-            <p class="card-text">Price: <span>&#8377;</span><%=product.price%></p>
+            <p class="card-text">Price: <span>&#8377;</span> <%=product.price%></p>
             <%product.category.forEach(c => { %>
                 <span class="badge badge-pill badge-success"><%=c%></span>
             <% })%>
             <br><br>
             <form action="/products/addToCart/<%=product._id%>" method="post" class="card-text">
-              <select name="quantity" id="" class="card-text">
+              <select name="quantity" id="" class="card-text quantity">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -118,7 +118,52 @@
     </div>
     <a href="/products" class="btn btn btn-info">Back to products</a>
     
+    <br><br>
+    <form action="/products/<%=product._id%>/review" method="POST">
+      <textarea name="content" id="" cols="80" rows="5" placeholder="Add Comments here.."></textarea>
+      <br><br>
+      <button type="submit" class="btn btn-info">Add Review</button>
+    </form>
+  
+  <br>
+  <h4 id="">Reviews:</h4>
+  <br>
+
+  
+  <div class="row d-flex  mt-100 mb-100">
+    <div class="container">
+      <% reviews.reverse().forEach(c => {%>
+        <div class="card cmargin">
+          
+            <div class="comment-widgets">
+                <!-- Comment Row -->
+
+                <div class="d-flex flex-row comment-row m-t-0 ">
+                    <div class="p-2">
+                      <img src="/images/uploads/<%=c.author.avatar%>" alt="user" width="50" class="small-img rounded-circle img-responsive z-depth-0">
+                    </div>
+                    <div class="comment-text w-100">
+                        <h6 class="font-medium text-success font-weight-bold"><%=c.author.username%> :</h6> 
+                        <span class="m-b-15 d-block text-dark"> <%=c.content%>  </span>
+                        <% if(user._id.toString() === c.author.id.toString()) {%>
+                          <a href="/products/<%=c.id%>/editReview"><i class="far fa-edit"></i></a>
+                          <a href="/products/<%=c.id%>/deleteReview"><i class="far fa-trash-alt"></i></a>
+                          <% } %>
+                    </div>
+                </div> <!-- Comment Row -->
+                
+            </div> <!-- Card -->
+            
+        </div>
+        <%})%>
+    </div>
+  </div>
+
+
 </div>
+
+
+
 
 <link
 rel="stylesheet"

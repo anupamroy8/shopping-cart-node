@@ -1,5 +1,89 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <title>Document</title>
+</head>
+<body>
+  <nav
+class="navbar navbar-expand-lg navbar-light"
+style="background-color: #e3f2fd;"
+>
+<a class="navbar-brand" href="/">MY AMAZON</a>
+<button
+  class="navbar-toggler"
+  type="button"
+  data-toggle="collapse"
+  data-target="#navbarSupportedContent"
+  aria-controls="navbarSupportedContent"
+  aria-expanded="false"
+  aria-label="Toggle navigation"
+>
+  <span class="navbar-toggler-icon"></span>
+</button>
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item active">
+      <a class="nav-link" href="/products"
+        >Home <span class="sr-only">(current)</span></a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/products/add">Add Product</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Categories</a>
+    </li>
+  </ul>
+  <form class="form-inline my-2 my-lg-0">
+    <input
+      class="form-control mr-sm-2"
+      type="search"
+      placeholder="Search"
+      aria-label="Search"
+    />
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+      Search
+    </button>
+  </form>
+  <li class="navbar-nav nav-item">
+    <a class="nav-link active" href="/products/<%=locals.user.id%>/mycart"
+      ><i class="fa fa-shopping-cart"></i>Cart</a
+    >
+  </li>
+  <li class="navbar-nav nav-item">
+    <a class="nav-link" href="/users/logout">Logout</a>
+  </li>
+  <li class="navbar-nav nav-item">
+    <%if(locals.user.isAdmin){%>
+    <img
+      src="<%=locals.user.avatar%>"
+      class="small-img rounded-circle img-responsive z-depth-0"
+      alt="<%=locals.user.username%>"
+    />
+    <%} else if(!locals.user.isAdmin) {%>
 
+    <img
+      src="/images/uploads/<%=locals.user.avatar%>"
+      class="small-img rounded-circle img-responsive z-depth-0 "
+      alt="<%=locals.user.username%>"
+    />
+    <%} else {%>
+    <img
+      src="..."
+      class="small-img rounded-circle img-responsive z-depth-0"
+      alt="<%=locals.user.username%>"
+    />
+    <%}%>
+  </li>
+</div>
+</nav>
 
 <div class="container">
     <h1>Add product here:</h1>
@@ -17,4 +101,9 @@
     rel="stylesheet"
     href="https://use.fontawesome.com/releases/v5.0.8/css/all.css"
   />
+  
 </div>
+</body>
+</html>
+
+

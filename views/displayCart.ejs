@@ -112,7 +112,7 @@
               <tr>
                 <td class="col-md-6">
                   <div class="media">
-                    <a class="thumbnail pull-left" href="#">
+                    <a class="thumbnail pull-left" href="/products/<%=p.item.id%>/view">
                       <img
                         class="image-size"
                         src="/images/uploads/<%=p.item.imagePath%>"
@@ -131,11 +131,15 @@
                   </div>
                 </td>
                 <td class="col-md-1" style="text-align: center;">
+                  <form action="/products/updateToCart/<%=p.item.id%>" method="POST">
+                  
                   <input
-                    type="email"
+                    type="number"
+                    name="quantity"
                     class="form-control"
                     id="exampleInputEmail1"
                     value="<%=p.quantity%>"
+                    min="1"
                   />
                 </td>
                 <td class="col-md-1 text-center"><strong><span>&#8377; <%=p.item.price%></span> </strong></td>
@@ -145,6 +149,12 @@
                     <span class="glyphicon glyphicon-remove"></span> 
                     <a href="/products/<%=p.id%>/deleteCart">Remove</a>
                   </button>
+                  <br><br><br>
+                  <button type="submit" class="btn btn-success white">
+                    <span class="glyphicon glyphicon-remove"></span> 
+                    Update
+                  </button>
+                </form>
                 </td>
               </tr>
 

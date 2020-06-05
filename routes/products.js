@@ -4,7 +4,9 @@ var Product = require("../models/product");
 var path = require('path');
 var Cart = require("../models/cart");
 var Item = require("../models/ItemList");
-
+var Review = require("../models/review");
+var auth = require("../middlewares/auth")
+var app = express();
 // multer
 var multer  = require('multer');
 
@@ -33,12 +35,37 @@ router.get("/", async (req, res, next)=>{
     var item = await Item.find({cart: cartid});
     console.log(item)
   }
-  res.render("product", {products, email:req.UserInfo.email, item})
+  let categories = await Product.distinct("category");
+  // let categories = await Product.find({},{category:1, _id:0});
+
+  res.render("product", {products, email:req.UserInfo.email, item, categories})
   } catch (error) {
     next (error);
   }
 })
 
+// Search Products
+
+router.post("/search", async(req,res,next)=>{
+  try {
+    console.log(req.body.search,"sssss")
+    let products = await Product.find({title:req.body.search});
+    console.log(products);
+    if(req.UserInfo){
+      var cartid = req.UserInfo.cart;
+      var item = await Item.find({cart: cartid});
+      console.log(item)
+    }
+    let categories = await Product.distinct("category");
+    // let categories = await Product.find({},{category:1, _id:0});
+  
+    res.render("product", {products, email:req.UserInfo.email, item, categories})
+  } catch (error) {
+    next(error)
+  }
+})
+
+app.use(auth.checkUserLogged);
 
 
 
@@ -102,6 +129,39 @@ router.post("/addToCart/:pid", async (req, res, next)=>{
   }
 })
 
+// update cart
+router.post("/updateToCart/:pid", async (req, res, next)=>{
+  try {
+    var product = await Product.findById(req.params.pid);
+    // console.log(product, req.UserInfo, "inside carts");
+    if(product.quantity >= req.body.quantity); {
+      req.body.item = product._id;
+      req.body.cart = req.UserInfo.cart;
+      console.log(req.body,"cart");
+      var item = await Item.findOne({item: product._id});
+      console.log(item, "inside item");
+      
+      if(!item){
+        var item = await Item.create(req.body);
+        console.log(item, "create item");
+      } else {
+        var updatedItem = await Item.findByIdAndUpdate(item.id, {quantity: req.body.quantity}, {new:true});
+        console.log(updatedItem, "updated");
+      }
+      var cart = await Cart.findOneAndUpdate(
+        { userId: req.UserInfo.id},
+        { $addToSet: {itemList: item.id}},
+        { new:true}
+      );
+      console.log(cart, "inside cart");
+    } 
+    res.redirect(`/products/${req.UserInfo.id}/mycart`)
+  } catch (error) {
+    next (error)
+  }
+})
+
+
 // Add product
 router.get("/add", (req, res, next)=>{
     res.render("addProduct");
@@ -122,10 +182,71 @@ router.post("/add", upload.single("imagePath"), async (req, res, next)=>{
 
 // View single Product
 router.get("/:id/view", async (req, res, next)=>{
-  let product = await Product.findById(req.params.id);
-  console.log(product);
-  res.render("singleProduct", {product})
+  try {
+    let product = await Product.findById(req.params.id);
+    console.log(product);
+    if(req.UserInfo){
+      var cartid = req.UserInfo.cart;
+      var item = await Item.find({cart: cartid});
+      console.log(item)
+    }
+    let reviews = await Review.find({productId:product.id}).populate("author");
+    console.log(reviews,"test")
+    res.render("singleProduct",{product, email:req.UserInfo.email,item ,reviews})
+    
+  } catch (error) {
+    next(error)
+  }
 })
+
+
+// Review of a Product
+router.post("/:id/review", async (req, res, next)=>{
+  try {
+    var productId = req.params.id;
+    req.body.productId = productId;
+    req.body.author = req.UserInfo.id;
+    let reviewCreated = await Review.create(req.body);
+    console.log(reviewCreated);
+    let updateProduct = await Product.findByIdAndUpdate(productId, {$push: {reviews: (await reviewCreated).id}});
+    res.redirect(`/products/${productId}/view`);
+  } catch (error) {
+    next(error)
+  }
+})
+
+// Delete Review
+router.get("/:id/deleteReview", async(req, res, next)=>{
+  var reviewId = req.params.id;
+  var deletedReview = await Review.findByIdAndDelete(reviewId);
+  var updateProduct = await Product.findByIdAndUpdate(deletedReview.productId,
+    {$pull: {reviews: deletedReview.id}}
+    );
+  res.redirect(`/products/${deletedReview.productId}/view`)
+})
+
+// Edit Review
+router.get("/:id/editReview", async (req, res, next)=> {
+  try {
+    var reviewId = req.params.id;
+    var editReview = await Review.findById(reviewId);
+    res.render("editReview", { editReview });
+  } catch (error) {
+    next(error)
+  }
+
+})
+
+router.post("/:id/editReview", async (req, res, next)=> {
+  try {
+    var reviewId = req.params.id;
+    var editReview = await Review.findByIdAndUpdate(reviewId, req.body);
+    res.redirect(`/products/${editReview.productId}/view`);
+  } catch (error) {
+    next(error)
+  }
+})
+
 
 // Edit single Product
 router.get("/:id/edit", async (req, res, next)=>{

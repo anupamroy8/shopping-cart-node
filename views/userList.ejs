@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" href="/stylesheets/style.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</head>
+<body>
+
+
+    <nav class="navbar navbar-expand-lg navbar-light"  style="background-color: #e3f2fd">
+        <a class="navbar-brand" href="/">MY AMAZON</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="/products">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Categories</a>
+            </li>
+    
+    
+          </ul>
+          <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+          <li class="navbar-nav nav-item">
+            <a class="nav-link active" href="/users/login"><i class="fa fa-shopping-cart"></i>Cart</a>
+          </li>
+          <li class="navbar-nav nav-item">
+            <a class="nav-link" href="/users/login">Login</a>
+          </li>
+    
+        </div>
+      </nav>
+
+<hr>
+<div class="container bootstrap snippet">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="main-box no-header clearfix">
+                <div class="main-box-body clearfix">
+                    <div class="table-responsive">
+                        <table class="table user-list">
+                            <thead>
+                                <tr>
+                                <th><span>User</span></th>
+                                <th><span>Created</span></th>
+                                <th class="text-center"><span>Status</span></th>
+                                
+                                <th><span>Email</span></th>
+                                <th class="text-center"><span>Block</span></th>
+                                <th class="text-center"><span>Delete</span></th>
+                                <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%allUser.forEach(user=> {%>
+                                    <tr>
+                                        <td>
+                                            <img src="/images/uploads/<%=user.avatar%>"
+                                            class="small-img rounded-circle img-responsive z-depth-0 "
+                                            alt="<%=user.username%>"
+                                            <a href="#" class="user-link"></a>
+                                            <span class="user-subhead"> <%=user.username%></span>
+                                        </td>
+                                        <td><%=user.createdAt%></td>
+                                        
+                                        <td class="text-center">
+                                            <%if(user.isVerified){ %>  
+                                                <span class="label label-default">Verified</span>
+                                            <%} else { %>
+                                                <span class="label label-default">Not Verified</span>
+                                            <%}%>
+                                        </td>
+                                        <td>
+                                            <a href="#"><%=user.email%></a>
+                                        </td>
+                                        <td class="text-center">
+                                            <%if(user.isBlocked){ %>  
+                                                <form action="/users/block/<%=user.id%>" method="POST">
+                                                    <button class="label label-default btn btn-info" type="submit">Unblock</button>
+                                                </form>                                             
+                                                
+                                            <%} else { %>
+                                                <form action="/users/block/<%=user.id%>" method="POST">
+                                                    <button class="label label-default btn btn-info" type="submit">Block</button>
+                                                </form>  
+                                                <!-- <a href="/users/<%=user.id%>/block"><button class="label label-default btn btn-info" type="submit">Block</button></a> -->
+                                            <%}%>
+                                            
+                                            <!-- <span class="label label-default btn btn-info">Block</span> -->
+                            
+                                        </td>
+                                        <td class="text-center">
+
+                                            <form action="/users/delete/<%=user.id%>" method="POST">
+                                                <button class="label label-default btn btn-danger" type="submit">Delete</button>
+                                            </form>                                             
+                                                
+                                        </td>
+                                        <td style="width: 20%;">
+                                            <a href="#" class="table-link">
+                                                <span class="fa-stack">
+                                                    <i class="fa fa-square fa-stack-2x"></i>
+                                                    <i class="fa fa-search-plus fa-stack-1x fa-inverse"></i>
+                                                </span>
+                                            </a>
+                                            <a href="#" class="table-link">
+                                                <span class="fa-stack">
+                                                    <i class="fa fa-square fa-stack-2x"></i>
+                                                    <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+                                                </span>
+                                            </a>
+                                            <a href="#" class="table-link danger">
+                                                <span class="fa-stack">
+                                                    <i class="fa fa-square fa-stack-2x"></i>
+                                                    <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                                                </span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <%})%>
+  
+
+
+                                <!--  -->
+                                <!-- <tr>
+                                    <td>
+                                        <img src="https://bootdey.com/img/Content/user_3.jpg" alt="">
+                                        <a href="#" class="user-link">Full name 2</a>
+                                        <span class="user-subhead">Admin</span>
+                                    </td>
+                                    <td>2013/08/12</td>
+                                    <td class="text-center">
+                                        <span class="label label-success">Active</span>
+                                    </td>
+                                    <td>
+                                        <a href="#">marlon@brando.com</a>
+                                    </td>
+                                    <td style="width: 20%;">
+                                        <a href="#" class="table-link">
+                                            <span class="fa-stack">
+                                                <i class="fa fa-square fa-stack-2x"></i>
+                                                <i class="fa fa-search-plus fa-stack-1x fa-inverse"></i>
+                                            </span>
+                                        </a>
+                                        <a href="#" class="table-link">
+                                            <span class="fa-stack">
+                                                <i class="fa fa-square fa-stack-2x"></i>
+                                                <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+                                            </span>
+                                        </a>
+                                        <a href="#" class="table-link danger">
+                                            <span class="fa-stack">
+                                                <i class="fa fa-square fa-stack-2x"></i>
+                                                <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                                            </span>
+                                        </a>
+                                    </td>
+                                </tr> -->
+<!--  -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+
