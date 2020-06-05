@@ -53,10 +53,10 @@
               Categories
             </a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <%categories.forEach(p=> {%>
+                <a class="dropdown-item" href="/products?category=<%=p%>"><%=p%></a>
+              <%})%>
               
-              <a class="dropdown-item" href="#"><%=categories%></a>
-              <!-- <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a> -->
             </div>
           </li>
         </ul>
@@ -68,6 +68,7 @@
             aria-label="Search"
             name="search"
           />
+          
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
             Search
           </button>
@@ -119,13 +120,17 @@
       <%} else {%>
         <h2>Welcome Anonymous!!!</h2>
       <%}%>
-      <%=categories%>
+
+      <%if(msg){%>
+        <h3><%=msg%></h3>
+        <%}%>
+
       <div class="row d-flex">
         <% products.forEach(p=> {%>
         <div class="col-md-4 d-flex align-content-around flex-wrap">
           <div class="card" style="width: 18rem;">
             <img
-              src="images/uploads/<%=p.imagePath%>"
+              src="/images/uploads/<%=p.imagePath%>"
               class="card-img-top myimg"
               alt="product_image"
             />
@@ -134,7 +139,7 @@
               <p class="card-text"><%=p.description.length>180?p.description.slice(0,180)+"...":p.description%></p>
               <p class="card-text"><span>&#8377;</span><%=p.price%></p>
               <%p.category.forEach(c => { %>
-              <span class="badge badge-pill badge-secondary"><%=c%></span>
+                <a href="/products?category=<%=c%>"><span class="badge badge-pill badge-secondary"><%=c%></span></a>
               <% })%>
               <br /><br />
 
@@ -143,9 +148,14 @@
                 <select name="quantity" id="" class="card-text none">
                   <option value="1">1</option>
                 </select>
-                <button type="submit" class="btn btn-success card-text" >
-                  Add to cart
-                </button>
+                <%if(locals.user){%>
+                  <%if(!locals.user.isAdmin){%>
+                    <button type="submit" class="btn btn-success card-text" >
+                      Add to cart
+                    </button>
+                  <%}%>
+                <%}%>
+
                 <a href="/products/<%=p._id%>/view" class="btn btn btn-info"
                   >View</a
                 >

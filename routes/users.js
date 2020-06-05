@@ -3,6 +3,7 @@ var router = express.Router();
 var User = require('../models/user');
 var Cart = require('../models/cart');
 var Item = require("../models/ItemList");
+var Review = require("../models/review");
 var nodemailer = require("nodemailer");
 var path = require("path");
 var smtpTransport = require('nodemailer-smtp-transport');
@@ -78,7 +79,7 @@ router.post("/register", upload.single("avatar"), (req, res, next)=>{
     from: process.env.GMAIL_ID,
     to: req.body.email,
     subject: `Verification code ${verificationCode} for Shopping-Cart`,
-    html: `<h2>Kindly verify you mail id, with verifcation code: ${verificationCode}<h2>`
+    html: `<h2>Kindly verify you mail id, with verifcation code: ${verificationCode}<h2> <br> <a href="http://localhost:3000/users/login">Click Here to login</a>`
 };
   transport.sendMail(mailOptions, function(error, info){
     if(error){
@@ -151,13 +152,14 @@ router.post("/delete/:id", async (req,res,next)=>{
   var user = await User.findById(userId, "-password");
   var cartId = user.cart;
   console.log(user,"herreeeee");
-  
   // deleting starts here
-  var deleteItems = await Item.find({cart:cartId});
+  var deleteItems = await Item.deleteMany({cart:cartId});
   console.log(deleteItems,"itemsss");
-  var deleteCart = await Cart.findById(cartId);
+  var deleteCart = await Cart.findByIdAndDelete(cartId);
   console.log(deleteCart,"cartttt");
-  var deleteuser = await User.findById(userId);
+  var deleteReviews = await Review.deleteMany({ author:userId });
+  console.log(deleteReviews,"reviewsss del");
+  var deleteuser = await User.findByIdAndDelete(userId);
   console.log(deleteuser,"deletted user");
   res.redirect("/users/all")
 });

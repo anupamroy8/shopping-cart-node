@@ -6,8 +6,10 @@ var logger = require('morgan');
 var mongoose = require("mongoose")
 var session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
-var auth = require("./middlewares/auth")
-var passport = require("passport")
+var auth = require("./middlewares/auth");
+var passport = require("passport");
+var flash = require("connect-flash");
+var stripe = require("stripe")("sk_test_51GqjRpIOBWTLG7Fdo9VtAyWRnmUY3JB4s07BhpEzWBsiw3G8aH2aCtL7sADAkZTK7THOeiYAdcl2aZSooDvK8RCM00tonaKCnH");
 
 
 var indexRouter = require('./routes/index');
@@ -51,7 +53,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // routers
-
+app.use(flash());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use(auth.checkUserLogged);

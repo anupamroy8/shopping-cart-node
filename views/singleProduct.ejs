@@ -51,34 +51,38 @@
       </button>
     </form>
     <li class="navbar-nav nav-item">
+      <%if(!locals.user.isAdmin){%>
       <a class="nav-link active" href="/products/<%=locals.user.id%>/mycart"
         ><i class="fa fa-shopping-cart"></i>Cart <%=item.length%></a
       >
+      <%}%>
     </li>
     <li class="navbar-nav nav-item">
       <a class="nav-link" href="/users/logout">Logout</a>
     </li>
     <li class="navbar-nav nav-item">
-      <%if(locals.user.isAdmin){%>
-      <img
-        src="<%=locals.user.avatar%>"
-        class="small-img rounded-circle img-responsive z-depth-0"
-        alt="<%=locals.user.username%>"
-      />
-      <%} else if(!locals.user.isAdmin) {%>
-
-      <img
+      <%if(locals.user){%>
+        <%if(!locals.user.isAdmin){%>
+        <img
         src="/images/uploads/<%=locals.user.avatar%>"
         class="small-img rounded-circle img-responsive z-depth-0 "
         alt="<%=locals.user.username%>"
       />
-      <%} else {%>
-      <img
-        src="..."
-        class="small-img rounded-circle img-responsive z-depth-0"
+      <%}%>
+      <%if(locals.user.isAdmin){%>
+        <img
+        src="<%=locals.user.avatar%>"
+        class="small-img rounded-circle img-responsive z-depth-0 "
         alt="<%=locals.user.username%>"
       />
-      <%}%>
+        <%}%>
+      <%} else {%>
+        <img
+        src="https://i.picsum.photos/id/237/200/300.jpg"
+        class="small-img rounded-circle img-responsive z-depth-0"
+        alt="picsum"
+      />
+      <%} %>
     </li>
   </div>
 </nav>
@@ -93,8 +97,11 @@
         <div>
             <figcaption class="figure-caption"><%=product.description%></figcaption>
             <p class="card-text">Price: <span>&#8377;</span> <%=product.price%></p>
+            <% if(locals.user.isAdmin){%>
+            <p class="card-text">Quantity Available: <%=product.quantity%></p>
+            <%}%>
             <%product.category.forEach(c => { %>
-                <span class="badge badge-pill badge-success"><%=c%></span>
+              <a href="/products?category=<%=c%>"><span class="badge badge-pill badge-secondary"><%=c%></span></a>
             <% })%>
             <br><br>
             <form action="/products/addToCart/<%=product._id%>" method="post" class="card-text">
@@ -119,12 +126,16 @@
     <a href="/products" class="btn btn btn-info">Back to products</a>
     
     <br><br>
-    <form action="/products/<%=product._id%>/review" method="POST">
-      <textarea name="content" id="" cols="80" rows="5" placeholder="Add Comments here.."></textarea>
-      <br><br>
-      <button type="submit" class="btn btn-info">Add Review</button>
-    </form>
-  
+    <%if(locals.user){%>
+      <%if(!locals.user.isAdmin){%>
+        <form action="/products/<%=product._id%>/review" method="POST">
+          <textarea name="content" id="" cols="80" rows="5" placeholder="Add Comments here.."></textarea>
+          <br><br>
+          <button type="submit" class="btn btn-info">Add Review</button>
+        </form>
+      <%}%>
+    <%}%>
+
   <br>
   <h4 id="">Reviews:</h4>
   <br>
