@@ -165,34 +165,6 @@ router.post("/addToCart/:pid", async (req, res, next) => {
 // update cart
 router.post("/updateToCart/:pid", async (req, res, next) => {
   try {
-    // var product = await Product.findById(req.params.pid);
-    // console.log(product, req.UserInfo, "inside carts");
-    // if (product.quantity >= req.body.quantity);
-    // {
-    //   req.body.item = product._id;
-    //   req.body.cart = req.UserInfo.cart;
-    //   console.log(req.body, "cart");
-    //   var item = await Item.findOne({ item: product._id });
-    //   console.log(item, "inside item");
-
-    //   if (!item) {
-    //     var item = await Item.create(req.body);
-    //     console.log(item, "create item");
-    //   } else {
-    //     var updatedItem = await Item.findByIdAndUpdate(
-    //       item.id,
-    //       { quantity: req.body.quantity },
-    //       { new: true }
-    //     );
-    //     console.log(updatedItem, "updated");
-    //   }
-    //   var cart = await Cart.findOneAndUpdate(
-    //     { userId: req.UserInfo.id },
-    //     { $addToSet: { itemList: item.id } },
-    //     { new: true }
-    //   );
-    //   console.log(cart, "inside cart");
-    // }
     var product = await Product.findById(req.params.pid);
     var cart = await Cart.findById(req.UserInfo.cart);
     console.log(product, cart, "inside carts");
@@ -363,5 +335,11 @@ router.get("/:id/delete", async (req, res, next) => {
     next(error);
   }
 });
+
+// Checkout
+router.get("/checkout", async (req,res,next)=>{
+  res.render("checkout");
+})
+
 
 module.exports = router;
