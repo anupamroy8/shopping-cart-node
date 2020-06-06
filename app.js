@@ -11,7 +11,7 @@ var passport = require("passport");
 var flash = require("connect-flash");
 var stripe = require("stripe")("sk_test_51GqjRpIOBWTLG7Fdo9VtAyWRnmUY3JB4s07BhpEzWBsiw3G8aH2aCtL7sADAkZTK7THOeiYAdcl2aZSooDvK8RCM00tonaKCnH");
 
-
+require("dotenv").config();
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var shopsrouter = require("./routes/shops");
@@ -19,7 +19,7 @@ var productsrouter = require("./routes/products");
 
 
 // DB connect
-mongoose.connect("mongodb://localhost:27017/shopping-cart", { useNewUrlParser: true, useUnifiedTopology: true },(err)=>{
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true },(err)=>{
     console.log("connected", err ? err: true);   
 });
 
