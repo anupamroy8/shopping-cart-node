@@ -9,7 +9,7 @@ const MongoStore = require('connect-mongo')(session);
 var auth = require("./middlewares/auth");
 var passport = require("passport");
 var flash = require("connect-flash");
-var stripe = require("stripe")("sk_test_51GqjRpIOBWTLG7Fdo9VtAyWRnmUY3JB4s07BhpEzWBsiw3G8aH2aCtL7sADAkZTK7THOeiYAdcl2aZSooDvK8RCM00tonaKCnH");
+// var stripe = require("stripe")("sk_test_51GqjRpIOBWTLG7Fdo9VtAyWRnmUY3JB4s07BhpEzWBsiw3G8aH2aCtL7sADAkZTK7THOeiYAdcl2aZSooDvK8RCM00tonaKCnH");
 
 require("dotenv").config();
 var indexRouter = require('./routes/index');

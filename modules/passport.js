@@ -8,7 +8,7 @@ passport.use(
         {
             clientID: process.env.CLIENT_ID,
             clientSecret: process.env.CLIENT_SECRET,
-            callbackURL: "/auth/github/callback"
+            callbackURL: "https://shopping-cart-node-anupam.herokuapp.com/auth/github/callback"
         },
         (accessToken, refreshToken, profile, done)=>{
             var newAdmin = {
