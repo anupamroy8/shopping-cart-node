@@ -79,7 +79,7 @@ router.post("/register", upload.single("avatar"), (req, res, next)=>{
     from: process.env.GMAIL_ID,
     to: req.body.email,
     subject: `Verification code ${verificationCode} for Shopping-Cart`,
-    html: `<h2>Kindly verify you mail id, with verifcation code: ${verificationCode}<h2> <br> <a href="http://localhost:3000/users/login">Click Here to login</a>`
+    html: `<h2>Kindly verify you mail id, with verifcation code: ${verificationCode}<h2> <br> <a href="https://shopping-cart-node-anupam.herokuapp.com/users/login">Click Here to login</a>`
 };
   transport.sendMail(mailOptions, function(error, info){
     if(error){
