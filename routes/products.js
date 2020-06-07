@@ -215,8 +215,9 @@ router.get("/add", (req, res, next) => {
 router.post("/add", upload.single("imagePath"), async (req, res, next) => {
   try {
     req.body.category = req.body.category.split(",").map((el) => el.trim());
-    // console.log(req.file);
-    req.body.imagePath = req.file.filename;
+    if (req.file) {
+      req.body.imagePath = req.file.filename;
+    }
     let product = await Product.create(req.body);
     console.log(product);
     res.redirect("/products");

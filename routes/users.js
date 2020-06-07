@@ -65,6 +65,7 @@ router.get("/register", (req, res, next)=>{
 // Register Post
 router.post("/register", upload.single("avatar"), (req, res, next)=>{
   console.log(req.body)
+  // Sending email
   var verificationCode = Math.floor(Math.random()*100000);
   req.body.verificationCode = verificationCode;
   var transport = nodemailer.createTransport(smtpTransport({
@@ -88,8 +89,10 @@ router.post("/register", upload.single("avatar"), (req, res, next)=>{
     console.log('Message sent: ' + info.response);
   });
   
-  //user create
-  req.body.avatar = req.file.filename;
+  //user creation
+  if (req.file) {
+    req.body.avatar = req.file.filename;
+  }
   User.create(req.body, (err, user)=>{
     if(err) return next(err);
     console.log(user);
