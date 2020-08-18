@@ -1,16 +1,16 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
 var passport = require("passport");
 var Product = require("../models/product");
 // var Item = require("../models/ItemList");
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get("/", function (req, res, next) {
+  res.render("index", { title: "Express" });
 });
 
 // Unathenticated routes for viewing products withput login
-router.get('/viewproducts', async function(req, res, next) {
+router.get("/viewproducts", async function (req, res, next) {
   try {
     var filter = {};
     if (req.query.category) {
@@ -18,9 +18,9 @@ router.get('/viewproducts', async function(req, res, next) {
     }
     let products = await Product.find(filter);
     let categories = await Product.distinct("category");
-    res.render('viewproducts', { products, categories });
+    res.render("viewproducts", { products, categories });
   } catch (error) {
-    next(error)
+    next(error);
   }
 });
 // Unathenticated product search
@@ -32,7 +32,7 @@ router.post("/viewsearch", async (req, res, next) => {
     });
     console.log(products);
     let categories = await Product.distinct("category");
-    res.render('viewproducts', { products, categories });
+    res.render("viewproducts", { products, categories });
   } catch (error) {
     next(error);
   }
@@ -40,16 +40,15 @@ router.post("/viewsearch", async (req, res, next) => {
 
 // GitHub
 
-router.get("https://shopping-cart-node-anupam.herokuapp.com/auth/github", passport.authenticate("github"));
+router.get("/auth/github", passport.authenticate("github"));
 
 router.get(
-  "https://shopping-cart-node-anupam.herokuapp.com/auth/github/callback", 
-  passport.authenticate("github",{failureRedirect: "/failure"}),
-  (req, res)=>{
+  "/auth/github/callback",
+  passport.authenticate("github", { failureRedirect: "/failure" }),
+  (req, res) => {
     console.log(req.user);
     res.redirect("/products");
   }
 );
-
 
 module.exports = router;
